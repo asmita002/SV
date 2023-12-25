@@ -4,14 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+
+        .taskbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .taskbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .taskbar a:hover {
+            color: #2980b9;
+        }
+
+        /* Added style for Logout button */
+        .logout-button {
+            display: inline-block;
+            /* background-color: #e74c3c; */
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirmation-modal {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 8px 20px;
+            margin: 0 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .confirm-logout {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .cancel-logout {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        /* .logout-button:hover {
+            background-color: #c0392b;
+        } */
+    </style>
 </head>
 <body style="text-align: center;">
+    <div class="taskbar" style="height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+        <div>
+            <!-- Replaced Signup/Login with Logout -->
+            <div class="signup-login">
+                <a href="/logout" class="logout-button">Logout</a>
+            </div>
+        </div>
+        <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+            <a href="/" style="font-size: 24px;">Home</a>
+        </div>
+        <div>
+            <a href="/resume-review">Resume Review</a>
+            <a href="/setup-interview">Set Up Interview</a>
+            <a href="/about">About the Company</a>
+            <a href="/faq">FAQ</a>
+        </div>
+    </div>
+
     <h1>User Dashboard</h1>
     <div class="buttons-container">
         <a href="/user_dashboard/my_interviews" style="display: inline-block; background-color: #3498db; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-bottom: 10px;">My Interviews</a>
         <a href="/select_interviews" style="display: inline-block; background-color: #3498db; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Select Interviews</a>
-        <a href="/logout" style="display: inline-block; background-color: #e74c3c; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">Logout</a>
     </div>
+
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="modal-content">
+            <p>Are you sure you want to logout?</p>
+            <div class="modal-buttons">
+                <button class="confirm-logout" onclick="confirmLogout()">Yes</button>
+                <button class="cancel-logout" onclick="closeModal()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the logout button element
+        const logoutButton = document.querySelector('.logout-button');
+    
+        // Add a click event listener to the logout button
+        logoutButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevents the default action (i.e., navigating to /logout)
+            showConfirmationModal(); // Displays the confirmation modal
+        });
+    
+        // Function to display the confirmation modal
+        function showConfirmationModal() {
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+    
+        // Function to close the confirmation modal
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+    
+        // Function to handle the logout confirmation
+        function confirmLogout() {
+            window.location.href = '/logout'; // Redirect to logout if confirmed
+        }
+    </script>
+
 </body>
 </html>

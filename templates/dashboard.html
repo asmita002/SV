@@ -190,8 +190,10 @@
                 <a>Sign Up</a>
                 <a>Login</a>
                 <div class="additional-options" id="additionalOptions">
-                    <a href="/interviewer_signup">Interviewer</a>
-                    <a href="/signup">Interviewee</a>
+                    <a href="/interviewer_signup">Interviewer Sign Up</a>
+                    <a href="/interviewer_login">Interviewer Login</a>
+                    <a href="/signup">Interviewee Sign Up</a>
+                    <a href="/login">Interviewee Login</a>
                 </div>
             </div>
         </div>
@@ -273,21 +275,28 @@
         const signupLogin = document.querySelector('.signup-login');
         const additionalOptions = document.getElementById('additionalOptions');
 
-        // Toggle display of additional options on signup/login hover
-        signupLogin.addEventListener('mouseover', () => {
-            additionalOptions.style.display = 'flex';
+        // Show signup options on hover
+        signupLogin.children[0].addEventListener('mouseenter', () => {
+            additionalOptions.children[0].style.display = 'block';
+            additionalOptions.children[1].style.display = 'none';
+            additionalOptions.children[2].style.display = 'block';
+            additionalOptions.children[3].style.display = 'none';
+        });
+
+        // Show login options on hover
+        signupLogin.children[1].addEventListener('mouseenter', () => {
+            additionalOptions.children[0].style.display = 'none';
+            additionalOptions.children[1].style.display = 'block';
+            additionalOptions.children[2].style.display = 'none';
+            additionalOptions.children[3].style.display = 'block';
         });
 
         // Hide additional options when leaving the signup/login area
-        signupLogin.addEventListener('mouseleave', (event) => {
-            if (!signupLogin.contains(event.relatedTarget)) {
-                additionalOptions.style.display = 'none';
-            }
-        });
-
-        // Hide additional options when leaving the options box
-        additionalOptions.addEventListener('mouseleave', () => {
-            additionalOptions.style.display = 'none';
+        signupLogin.addEventListener('mouseleave', () => {
+            additionalOptions.children[0].style.display = 'none';
+            additionalOptions.children[1].style.display = 'none';
+            additionalOptions.children[2].style.display = 'none';
+            additionalOptions.children[3].style.display = 'none';
         });
     </script>
 

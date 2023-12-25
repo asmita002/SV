@@ -156,6 +156,10 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('dashboard'))
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
