@@ -133,59 +133,40 @@
             <a href="/faq">FAQ</a>
         </div>
     </div>
+    <h2>Interview Schedule</h2>
+    
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Set Time</th>
+            <th>Zoom Link</th>
+        </tr>
+        <tr>
+            <td>Asmita Pramanik</td>
+            <td>asmita@example.com</td>
+            <td>
+                <select>
+                    <option value="2024-02-12">February 12, 2024</option>
+                    <option value="2024-02-15">February 15, 2024</option>
+                    <!-- Add more dates here -->
+                </select>
+            </td>
+            <td><a href="https://zoom.us/asmita-interview">Join Zoom Meeting</a></td>
+        </tr>
+        <tr>
+            <td>Abhee Jani</td>
+            <td>abhee@example.com</td>
+            <td>
+                <select>
+                    <option value="2024-02-12">February 12, 2024</option>
+                    <option value="2024-02-15">February 15, 2024</option>
+                    <!-- Add more dates here -->
+                </select>
+            </td>
+            <td><a href="https://zoom.us/abhee-interview">Join Zoom Meeting</a></td>
+        </tr>
+    </table>
 
-    <div class="main-content">
-        <h1>Resume Review</h1>
-
-        <form id="resume-form" action="/upload_resume" method="post" enctype="multipart/form-data">
-            <div class="drop-area" id="dropArea">
-                <p>Drag & Drop your resume file here</p>
-            </div>
-            <input type="file" id="fileInput" name="resume" style="display: none;">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name">
-            <button type="submit">Submit</button>
-        </form>
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        <button onclick="window.location.href='/dashboard'" style="margin-top: 20px;">Go to Dashboard</button>
-    </div>
-
-    <script>
-        const dropArea = document.getElementById('dropArea');
-        const fileInput = document.getElementById('fileInput');
-
-        dropArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropArea.classList.add('active');
-        });
-
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.classList.remove('active');
-        });
-
-        dropArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function() {
-                    dropArea.innerHTML = `<p>${file.name}</p>`;
-                }
-                reader.readAsDataURL(file);
-                fileInput.files = e.dataTransfer.files;
-            }
-            dropArea.classList.remove('active');
-        });
-    </script>
 </body>
 </html>

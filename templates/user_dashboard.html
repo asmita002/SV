@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Resume Review</title>
     <style>
+        /* Add your styling here */
+        /* ... */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            overflow-y: scroll; /* Enable vertical scrolling */
+        }
+
+        h1 {
+            color: #3498db;
+            margin-bottom: 20px;
+            font-size: 40px;
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease;
+        }
 
         .taskbar {
             position: fixed;
@@ -32,78 +49,74 @@
             color: #2980b9;
         }
 
-        /* Added style for Logout button */
-        .logout-button {
-            display: inline-block;
-            /* background-color: #e74c3c; */
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
+        .main-content {
+            padding-top: 100px; /* Adjust to accommodate the taskbar */
+            padding-bottom: 50px; /* Provide some space at the bottom */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .drop-area {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .drop-area p {
+            text-align: center;
+        }
+
+        label {
+            color: #3498db;
             margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
             transition: background-color 0.3s ease;
         }
 
-        .confirmation-modal {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+        button[type="submit"]:hover {
+            background-color: #2980b9;
         }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-        }
-
-        button {
-            padding: 8px 20px;
-            margin: 0 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .confirm-logout {
-            background-color: #e74c3c;
-            color: #fff;
-        }
-
-        .cancel-logout {
-            background-color: #3498db;
-            color: #fff;
-        }
-
-        /* .logout-button:hover {
-            background-color: #c0392b;
-        } */
     </style>
 </head>
-<body style="text-align: center;">
-    <div class="taskbar" style="height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+<body>
+
+    <div class="taskbar">
+        <!-- new change for taskbar -->
         <div>
-            <!-- Replaced Signup/Login with Logout -->
-            <div class="signup-login">
-                <a href="/logout" class="logout-button">Logout</a>
-            </div>
+            {% if session.username %}
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/signup">Sign Up</a>
+                <a href="/login">Login</a>
+            {% endif %}
         </div>
-        <div style="position: absolute; left: 50%; transform: translateX(-50%);">
-            <a href="/" style="font-size: 24px;">Home</a>
-        </div>
+        <a href="/" style="text-align: center; flex-grow: 1;">Home</a>
         <div>
             <a href="/resume-review">Resume Review</a>
             <a href="/setup-interview">Set Up Interview</a>
@@ -112,47 +125,58 @@
         </div>
     </div>
 
-    <h1>User Dashboard</h1>
-    <div class="buttons-container">
-        <a href="/user_dashboard/my_interviews" style="display: inline-block; background-color: #3498db; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-bottom: 10px;">My Interviews</a>
-        <a href="/select_interviews" style="display: inline-block; background-color: #3498db; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Select Interviews</a>
-    </div>
+    <div class="main-content">
+        <h1>Resume Review</h1>
 
-    <div class="confirmation-modal" id="confirmationModal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
-            <div class="modal-buttons">
-                <button class="confirm-logout" onclick="confirmLogout()">Yes</button>
-                <button class="cancel-logout" onclick="closeModal()">No</button>
+        <form id="resume-form" action="/upload_resume" method="post" enctype="multipart/form-data">
+            <div class="drop-area" id="dropArea">
+                <p>Drag & Drop your resume file here</p>
             </div>
-        </div>
+            <input type="file" id="fileInput" name="resume" style="display: none;">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name">
+            <button type="submit">Submit</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <button onclick="window.location.href='/dashboard'" style="margin-top: 20px;">Go to Dashboard</button>
     </div>
 
     <script>
-        // Get the logout button element
-        const logoutButton = document.querySelector('.logout-button');
-    
-        // Add a click event listener to the logout button
-        logoutButton.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevents the default action (i.e., navigating to /logout)
-            showConfirmationModal(); // Displays the confirmation modal
-        });
-    
-        // Function to display the confirmation modal
-        function showConfirmationModal() {
-            document.getElementById('confirmationModal').style.display = 'flex';
-        }
-    
-        // Function to close the confirmation modal
-        function closeModal() {
-            document.getElementById('confirmationModal').style.display = 'none';
-        }
-    
-        // Function to handle the logout confirmation
-        function confirmLogout() {
-            window.location.href = '/logout'; // Redirect to logout if confirmed
-        }
-    </script>
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
 
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('active');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('active');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    dropArea.innerHTML = `<p>${file.name}</p>`;
+                }
+                reader.readAsDataURL(file);
+                fileInput.files = e.dataTransfer.files;
+            }
+            dropArea.classList.remove('active');
+        });
+    </script>
 </body>
 </html>

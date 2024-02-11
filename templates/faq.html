@@ -171,16 +171,20 @@
 
     <div class="taskbar" style="height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
         <div>
-            <div class="signup-login">
-                <a>Sign Up</a>
-                <a>Login</a>
-                <div class="additional-options" id="additionalOptions">
-                    <a href="/interviewer_signup">Interviewer Sign Up</a>
-                    <a href="/interviewer_login">Interviewer Login</a>
-                    <a href="/signup">Interviewee Sign Up</a>
-                    <a href="/login">Interviewee Login</a>
+            {% if 'username' not in session %}
+                <div class="signup-login">
+                    <a href="/signup">Sign Up</a>
+                    <a href="/login">Login</a>
+                    <div class="additional-options" id="additionalOptions">
+                        <a href="/interviewer_signup">Interviewer Sign Up</a>
+                        <a href="/interviewer_login">Interviewer Login</a>
+                        <a href="/signup">Interviewee Sign Up</a>
+                        <a href="/login">Interviewee Login</a>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <a href="/logout">Logout</a>
+            {% endif %}
         </div>
         <div style="position: absolute; left: 50%; transform: translateX(-50%);">
             <a href="/" style="font-size: 24px;">Home</a>

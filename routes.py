@@ -66,24 +66,24 @@ def upload_resume():
                 flash('Error uploading resume. Please try again.', 'error')
     return render_template('resume-review.html', messages=get_flashed_messages())
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error_message = None
-    if request.method == 'GET':
-        return render_template('login.html', error_message=error_message)
-    elif request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     error_message = None
+#     if request.method == 'GET':
+#         return render_template('login.html', error_message=error_message)
+#     elif request.method == 'POST':
+#         username = request.form.get('username')
+#         password = request.form.get('password')
 
-        if username in user_credentials and user_credentials[username] == password:
-            session['username'] = username
-            return render_template('user_dashboard.html', interviews=user_interviews)
-        elif username not in user_credentials:
-            error_message = 'Username not found'
-            return render_template('login.html', error_message=error_message)
-        else:
-            error_message = 'Password did not match your username'
-            return render_template('login.html', error_message=error_message)
+#         if username in user_credentials and user_credentials[username] == password:
+#             session['username'] = username
+#             return render_template('user_dashboard.html', interviews=user_interviews)
+#         elif username not in user_credentials:
+#             error_message = 'Username not found'
+#             return render_template('login.html', error_message=error_message)
+#         else:
+#             error_message = 'Password did not match your username'
+#             return render_template('login.html', error_message=error_message)
 
 
 @app.route('/user_dashboard', methods=['GET', 'POST'])
@@ -151,10 +151,24 @@ def my_interviews():
     else:
         return redirect(url_for('login'))
 
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('dashboard'))
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error_message = None
+    if request.method == 'GET':
+        return render_template('login.html', error_message=error_message)
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username in user_credentials and user_credentials[username] == password:
+            session['username'] = username  # Store username in session
+            return render_template('user_dashboard.html', interviews=user_interviews)
+        elif username not in user_credentials:
+            error_message = 'Username not found'
+            return render_template('login.html', error_message=error_message)
+        else:
+            error_message = 'Password did not match your username'
+            return render_template('login.html', error_message=error_message)
 
 @app.route("/about")
 def about():
@@ -163,6 +177,10 @@ def about():
 @app.route("/faq")
 def faq():
     return render_template('faq.html')
+
+@app.route("/setup-interview")
+def setup_interview():
+    return render_template('setup-interview.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
